@@ -4,25 +4,28 @@ This repository contains Terraform configurations for setting up the necessary i
 
 ## Project Structure
 
-- **bootstrap**
-  - **backend**
-    - **modules**
-      - **aks**
-        - **compute**
-          - **aks_resource_group**
-            - `main.tf`
-            - `variables.tf`
-        - **storage**
-          - **storage_account**
-            - `main.tf`
-            - `variables.tf`
-          - **storage_container**
-            - `main.tf`
-            - `variables.tf`
-    - `main.tf`
-    - `terraform.tf`
-    - `terraform.tfvars`
-    - `variables.tf`
+```
+bootstrap/
+└── backend/
+    ├── modules/
+    │   └── aks/
+    │       ├── compute/
+    │       │   └── aks_resource_group/
+    │       │       ├── aks_resource_group.tf
+    │       │       ├── outputs.tf
+    │       │       └── variables.tf
+    │       └── storage/
+    │           ├── storage_account/
+    │           │   ├── main.tf
+    │           │   └── variables.tf
+    │           └── storage_container/
+    │               ├── main.tf
+    │               └── variables.tf
+    ├── main.tf
+    ├── terraform.tf
+    ├── terraform.tfvars
+    └── variables.tf
+```
 
 ## Purpose
 
@@ -31,6 +34,21 @@ The Terraform configuration sets up:
 - An Azure Storage Account for storing Terraform state files
 - A Storage Container (Blob) for organizing state files
 - Built-in state locking using Azure's native capabilities
+
+## Module Details
+
+### AKS Resource Group Module
+Located in `modules/aks/compute/aks_resource_group/`
+- **aks_resource_group.tf**: Creates the Azure Resource Group
+- **outputs.tf**: Exposes resource group ID and name
+- **variables.tf**: Defines required variables:
+  - `aks_resource_group_name`: Name of the resource group
+  - `aks_location`: Azure region for deployment
+
+### Storage Modules
+Located in `modules/aks/storage/`
+- **storage_account**: Provisions an Azure Storage Account
+- **storage_container**: Creates a blob container within the storage account
 
 ## Getting Started
 
@@ -49,7 +67,7 @@ The Terraform configuration sets up:
     ```
 
 2. **Update Variables**:
-    - Open `terraform.tfvars` and set the appropriate values for your environment:
+    - Open `terraform.tfvars` and set the appropriate values:
       ```hcl
       aks_resource_group_name = "your-resource-group-name"
       aks_location = "your-azure-region"
@@ -69,23 +87,12 @@ The Terraform configuration sets up:
     terraform apply
     ```
 
-## File Descriptions
-
-- **`main.tf`**: Creates the resource group, storage account, and storage container using modular configurations
-- **`terraform.tf`**: Specifies Terraform's version requirements and Azure provider configurations
-- **`terraform.tfvars`**: Contains the variable values for the Terraform configuration
-- **`variables.tf`**: Defines the variables used across the Terraform configuration
-
-### Modules
-- **aks_resource_group**: Creates an Azure Resource Group for AKS-related resources
-- **storage_account**: Provisions an Azure Storage Account with appropriate settings
-- **storage_container**: Creates a blob container within the storage account
-
 ## Notes
 
-- Ensure your Azure credentials have the necessary permissions to create resource groups and storage resources
+- Ensure your Azure credentials have the necessary permissions
 - The storage account name must be globally unique across Azure
 - The configuration uses Azure RM provider version ~> 4.0 and Azure AD provider version ~> 3.0
+- Resource group outputs include both ID and name for flexible referencing
 
 ## License
 
