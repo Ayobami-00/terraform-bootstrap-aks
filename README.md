@@ -25,6 +25,7 @@ bootstrap/
     ├── terraform.tf
     ├── terraform.tfvars
     └── variables.tf
+├── Makefile
 ```
 
 ## Purpose
